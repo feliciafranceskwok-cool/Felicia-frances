@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Felicia Frances</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="style.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { 
+                        primary: '#ffb347', 
+                        secondary: '#6495ed', 
+                        accent: '#ffb347',
+                        koi1: '#ffb347',
+                        koi2: '#6495ed',
+                        koi3: '#ffb347',
+                        koi4: '#6495ed',
+                        koi5: '#fefefa',
+                        cyan: { 50: '#fff7ed', 100: '#ffedd5', 200: '#fed7aa', 300: '#fdba74', 400: '#ffb347', 500: '#ffb347', 600: '#ea580c', 900: '#7c2d12' },
+                        blue: { 50: '#eff6ff', 100: '#dbeafe', 200: '#bfdbfe', 300: '#93c5fd', 400: '#6495ed', 500: '#6495ed', 600: '#2563eb', 900: '#1e3a8a' },
+                        purple: { 50: '#fff7ed', 100: '#ffedd5', 200: '#fed7aa', 300: '#fdba74', 400: '#ffb347', 500: '#ffb347', 600: '#ea580c', 900: '#7c2d12' },
+                        pink: { 50: '#fff7ed', 100: '#ffedd5', 200: '#fed7aa', 300: '#fdba74', 400: '#ffb347', 500: '#ffb347', 600: '#ea580c', 900: '#7c2d12' }
+                    },
+                    fontFamily: { sans: ['Outfit', 'sans-serif'], display: ['Space Grotesk', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="h-screen flex overflow-hidden bg-[#f1f5fb] text-slate-800">
+
+    <!-- Desktop Sidebar -->
+    <aside class="hidden md:flex flex-col w-24 xl:w-64 sidebar h-full relative z-20 flex-shrink-0">
+        <div class="h-24 flex items-center justify-center xl:justify-start xl:px-8 border-b border-slate-100">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-400 to-blue-500 flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-cyan-200">F</div>
+            <div class="hidden xl:block ml-3">
+                <h1 class="font-bold text-lg leading-tight tracking-tight">Felicia</h1>
+                <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Lvl 11 &bull; Kelas XI.3</p>
+            </div>
+        </div>
+
+        <nav class="flex-grow py-6 px-4 flex flex-col gap-2">
+            <a href="index.html" class="nav-item active flex items-center justify-center xl:justify-start gap-4 px-4 py-3 rounded-2xl font-bold">
+                <i data-lucide="layout-grid" class="w-6 h-6"></i>
+                <span class="hidden xl:block">Dashboard</span>
+            </a>
+            <a href="profil.html" class="nav-item flex items-center justify-center xl:justify-start gap-4 px-4 py-3 rounded-2xl font-bold">
+                <i data-lucide="user" class="w-6 h-6"></i>
+                <span class="hidden xl:block">Profil Karakter</span>
+            </a>
+            <a href="informatika.html" class="nav-item flex items-center justify-center xl:justify-start gap-4 px-4 py-3 rounded-2xl font-bold">
+                <i data-lucide="terminal" class="w-6 h-6"></i>
+                <span class="hidden xl:block">Informatika</span>
+            </a>
+            <a href="bahasa-indonesia.html" class="nav-item flex items-center justify-center xl:justify-start gap-4 px-4 py-3 rounded-2xl font-bold">
+                <i data-lucide="book-open" class="w-6 h-6"></i>
+                <span class="hidden xl:block">Bahasa Indonesia</span>
+            </a>
+        </nav>
+        
+        <div class="p-4 mt-auto">
+            <button onclick="checkPassword()" class="w-full flex items-center justify-center xl:justify-start gap-3 px-4 py-3 rounded-2xl bg-slate-100 text-slate-500 hover:bg-slate-200 hover:text-slate-800 transition font-bold text-sm">
+                <i data-lucide="lock" class="w-5 h-5"></i>
+                <span class="hidden xl:block">Unlock Fitur</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- Mobile Bottom Bar -->
+    <nav class="md:hidden fixed bottom-0 left-0 w-full bg-white border-t border-slate-200 z-50 px-6 py-3 flex justify-between items-center pb-safe shadow-[0_-10px_20px_rgba(0,0,0,0.05)]">
+        <a href="index.html" class="flex flex-col items-center gap-1 text-primary">
+            <i data-lucide="layout-grid" class="w-6 h-6"></i>
+        </a>
+        <a href="profil.html" class="flex flex-col items-center gap-1 text-slate-400">
+            <i data-lucide="user" class="w-6 h-6"></i>
+        </a>
+        <a href="informatika.html" class="flex flex-col items-center gap-1 text-slate-400">
+            <i data-lucide="terminal" class="w-6 h-6"></i>
+        </a>
+        <a href="bahasa-indonesia.html" class="flex flex-col items-center gap-1 text-slate-400">
+            <i data-lucide="book-open" class="w-6 h-6"></i>
+        </a>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow h-full overflow-y-auto overflow-x-hidden relative slide-in-right pb-20 md:pb-0">
+        <div class="p-4 md:p-8 max-w-7xl mx-auto space-y-8">
+            
+            <!-- Big Anime Banner -->
+            <div class="w-full h-56 md:h-80 rounded-[2rem] overflow-hidden relative shadow-2xl group">
+                <img src="https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?auto=format&fit=crop&q=80&w=1200&h=400" alt="Banner" class="w-full h-full object-cover group-hover:scale-105 transition duration-700">
+                <div class="absolute inset-0 bg-gradient-to-r from-cyan-900/90 via-blue-900/60 to-transparent flex items-center p-8 md:p-12">
+                    <div class="text-white relative z-10">
+                        <p class="uppercase tracking-[0.2em] text-[10px] md:text-xs font-bold text-cyan-300 mb-2 font-display">Sistem Akademik / Beranda</p>
+                        <h2 class="text-4xl md:text-6xl font-bold font-display mb-2 drop-shadow-lg">FELICIA FRANCES</h2>
+                        <p class="text-blue-100 max-w-md text-sm leading-relaxed hidden sm:block">Selamat datang di antarmuka sistem. Pantau statistik, jadwal, dan putar musik favoritmu hari ini!</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Music Player + Playlist Widget (Gaya Game/Anime) -->
+            <div class="game-card p-2 md:p-4 flex flex-col xl:flex-row gap-4 relative overflow-hidden">
+                <div class="absolute -right-20 -bottom-20 w-64 h-64 bg-cyan-400 opacity-10 blur-[80px] rounded-full pointer-events-none"></div>
+
+                <!-- Player UI (Kiri) -->
+                <div class="w-full xl:w-2/3 flex flex-col sm:flex-row gap-6 items-center bg-white/50 rounded-[2rem] p-6 relative">
+                    
+                    <div class="w-32 h-32 md:w-48 md:h-48 flex-shrink-0 rounded-[2rem] overflow-hidden shadow-2xl border-[6px] border-white relative group">
+                        <img id="album-cover" src="https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?auto=format&fit=crop&q=80&w=400" class="w-full h-full object-cover group-hover:scale-110 transition duration-700" alt="Cover">
+                        <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300">
+                            <label class="cursor-pointer p-3 bg-white/20 backdrop-blur-md rounded-full text-white hover:bg-white/40 hover:scale-110 transition" title="Upload Lagu MP3">
+                                <i data-lucide="upload" class="w-6 h-6"></i>
+                                <!-- accept="audio/*" ← ditangkap oleh event delegation di document (script.js) -->
+                                <input type="file" id="audio-upload" accept="audio/*" multiple class="hidden">
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="flex-grow w-full text-center sm:text-left flex flex-col justify-center">
+                        <span class="px-3 py-1 bg-gradient-to-r from-koi1 to-koi2 text-white text-[10px] font-bold rounded-full w-fit mb-3 mx-auto sm:mx-0 uppercase tracking-[0.2em] shadow-lg">Now Playing</span>
+                        
+                        <div class="flex items-center justify-center sm:justify-start gap-3 mb-1">
+                            <h3 id="song-title" class="text-2xl md:text-3xl font-display font-bold text-slate-800 line-clamp-1">Miku Theme</h3>
+                            <!-- Edit Song Info Button — always visible, opens rich modal -->
+                            <button onclick="editCurrentSong()" class="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-[#ffb347]/15 to-[#6495ed]/15 hover:from-[#ffb347] hover:to-[#6495ed] text-[#ffb347] hover:text-white border border-[#ffb347]/40 hover:border-transparent rounded-xl text-[11px] font-bold uppercase tracking-wider transition-all duration-300 group" title="Edit Judul, Artis & Cover Lagu">
+                                <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
+                                <span class="hidden sm:inline">Edit Info</span>
+                            </button>
+                        </div>
+
+                        <p id="song-artist" class="text-slate-500 text-sm font-bold mb-6">Hatsune Miku</p>
+                        
+                        <div class="flex flex-col gap-2 w-full">
+                            <div class="flex justify-between text-xs font-bold text-slate-400 font-display">
+                                <span id="current-time">0:00</span>
+                                <span id="duration">0:00</span>
+                            </div>
+                            <input type="range" id="seek-bar" value="0" class="w-full cursor-pointer accent-cyan-500">
+                        </div>
+                        
+                        <div class="flex items-center justify-center sm:justify-start gap-6 mt-6">
+                            <button id="prev-btn" class="p-2 text-slate-400 hover:text-cyan-500 transition"><i data-lucide="skip-back" class="w-6 h-6 md:w-8 md:h-8 fill-current"></i></button>
+                            <button id="play-btn" class="w-16 h-16 bg-gradient-to-br from-cyan-400 to-blue-500 text-white rounded-full flex items-center justify-center shadow-[0_10px_20px_rgba(6,182,212,0.3)] hover:shadow-[0_15px_30px_rgba(6,182,212,0.5)] hover:scale-110 transition duration-300 border-4 border-white">
+                                <i data-lucide="play" id="play-icon" class="w-8 h-8 ml-1 fill-current"></i>
+                            </button>
+                            <button id="next-btn" class="p-2 text-slate-400 hover:text-cyan-500 transition"><i data-lucide="skip-forward" class="w-6 h-6 md:w-8 md:h-8 fill-current"></i></button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Playlist UI (Kanan) -->
+                <div class="w-full xl:w-1/3 bg-white/80 rounded-[2rem] p-5 border border-white flex flex-col h-72 xl:h-auto shadow-inner">
+                    <h4 class="font-bold flex items-center gap-2 mb-4 text-slate-800 font-display uppercase tracking-widest text-sm border-b border-slate-100 pb-3">
+                        <i data-lucide="list-music" class="w-5 h-5 text-purple-500"></i> Daftar Pemutar
+                    </h4>
+                    <div class="flex-grow overflow-y-auto space-y-2 pr-2" id="playlist-container">
+                        <!-- Playlist di-render secara dinamis dari script.js -->
+                    </div>
+                    
+                    <div class="mt-4 pt-3 border-t border-slate-100 flex flex-col gap-2">
+                        <!-- Label ini memicu <input type="file" accept="audio/*"> yg ditangkap Event Delegation di document -->
+                        <label class="w-full flex items-center justify-center gap-2 py-3 bg-slate-50 text-slate-600 hover:bg-[#ffb347] hover:text-white rounded-xl cursor-pointer text-xs font-bold uppercase tracking-wider transition border border-slate-200 border-dashed">
+                            <i data-lucide="music" class="w-4 h-4"></i> Tambah Lagu Lokal (Bisa Banyak)
+                            <input type="file" id="audio-upload-btn" accept="audio/*" multiple class="hidden">
+                        </label>
+                        <button onclick="openAddYouTubeModal()" class="w-full flex items-center justify-center gap-2 py-3 bg-red-50 text-red-500 hover:bg-red-500 hover:text-white rounded-xl text-xs font-bold uppercase tracking-wider transition border border-red-200 border-dashed">
+                            <svg style="width:14px;height:14px;fill:currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                            Tambah Video YouTube
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- YouTube Videos Section -->
+            <div class="mt-4">
+                <div class="flex items-center justify-between mb-5">
+                    <h3 class="text-xl font-bold font-display uppercase tracking-widest text-slate-800 flex items-center gap-3">
+                        <div class="w-9 h-9 rounded-xl bg-red-100 flex items-center justify-center">
+                            <svg style="width:18px;height:18px;fill:#ef4444" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                        </div>
+                        Video YouTube
+                    </h3>
+                    <button onclick="openAddYouTubeModal()" class="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-red-500 to-[#6495ed] text-white font-bold rounded-2xl text-xs uppercase tracking-widest hover:opacity-90 transition shadow-lg">
+                        <i data-lucide="plus" class="w-4 h-4"></i> Tambah Video
+                    </button>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5" id="youtube-grid">
+                    <!-- Rendered by JS -->
+                </div>
+            </div>
+
+            <!-- Schedule Header -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between mt-10 mb-6 gap-4">
+                <h2 class="text-2xl font-bold flex items-center gap-3 font-display text-slate-800">
+                    <div class="w-10 h-10 rounded-xl bg-purple-100 text-purple-600 flex items-center justify-center shadow-inner">
+                        <i data-lucide="calendar-range" class="w-5 h-5"></i>
+                    </div>
+                    Jadwal Misi (Pelajaran)
+                </h2>
+                <span class="px-5 py-2 bg-white border border-slate-200 rounded-full text-xs font-bold text-slate-600 shadow-sm w-fit uppercase tracking-widest">Target: XI-3</span>
+            </div>
+
+            <!-- Schedule Grid (Game style status cards) -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-5">
+                <!-- Senin -->
+                <div class="game-card p-6 border-t-4 border-t-amber-400 flex flex-col relative overflow-hidden group">
+                    <div class="absolute -right-4 -top-4 text-amber-500 opacity-5 group-hover:scale-150 transition duration-500"><i data-lucide="sun" class="w-32 h-32"></i></div>
+                    <div class="relative z-10">
+                        <div class="flex justify-between items-center mb-5 pb-3 border-b border-slate-100/50">
+                            <h3 class="font-bold text-amber-500 flex items-center gap-2 tracking-widest font-display text-lg"><i data-lucide="sun" class="w-5 h-5"></i> SENIN</h3>
+                            <span class="text-[10px] font-bold bg-amber-100 text-amber-700 px-2.5 py-1 rounded-md shadow-sm">Lv. 1</span>
+                        </div>
+                        <ul class="space-y-4 text-sm">
+                            <li class="flex flex-col"><span class="text-[10px] text-slate-400 font-display tracking-widest">06.30 - 07.30</span> <span class="font-bold text-slate-700">Upacara / Wali</span></li>
+                            <li class="flex flex-col"><span class="text-[10px] text-slate-400 font-display tracking-widest">07.30 - 09.00</span> <span class="font-bold text-slate-700">Sosiologi</span></li>
+                            <li class="flex flex-col"><span class="text-[10px] text-slate-400 font-display tracking-widest">09.30 - 10.50</span> <span class="font-bold text-slate-700">Mandarin</span></li>
+                            <li class="flex flex-col"><span class="text-[10px] text-slate-400 font-display tracking-widest">10.50 - 12.10</span> <span class="font-bold text-slate-700">Budi Pekerti</span></li>
+                            <li class="flex flex-col"><span class="text-[10px] text-slate-400 font-display tracking-widest">12.40 - 13.20</span> <span class="font-bold text-slate-700">Mat Wajib</span></li>
+                            <li class="flex flex-col"><span class="text-[10px] text-slate-400 font-display tracking-widest">13.20 - 14.40</span> <span class="font-bold text-slate-700">Ekonomi</span></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Selasa -->
+                <div class="game-card p-6 border-t-4 border-t-emerald-400 flex flex-col relative overflow-hidden group">
+                    <div class="absolute -right-4 -top-4 text-emerald-500 opacity-5 group-hover:scale-150 transition duration-500"><i data-lucide="leaf" class="w-32 h-32"></i></div>
+                    <div class="relative z-10">
+                        <div class="flex justify-between items-center mb-5 pb-3 border-b border-slate-100/50">
+                            <h3 class="font-bold text-emerald-500 flex items-center gap-2 tracking-widest font-display text-lg"><i data-lucide="leaf" class="w-5 h-5"></i> SELASA</h3>
+                            <span class="text-[10px] font-bold bg-emerald-100 text-emerald-700 px-2.5 py-1 rounded-md shadow-sm">Lv. 2</span>
+                        </div>
+                        <ul class="space-y-4 text-sm">
+                            <li class="flex flex-col"><span class="text-[10px] text-slate-400 font-display tracking-widest">06.45 - 08.15</span> <span class="font-bold text-slate-700">Agama</span></li>
+                            <li class="flex flex-col"><span class="text-[10px] text-slate-400 font-display tracking-widest">08.15 - 09.45</span> <span class="font-bold text-slate-700">B. Indonesia</span></li>
+                            <li class="flex flex-col"><span class="text-[10px] text-slate-400 font-display tracking-widest">10.05 - 11.35</span> <span class="font-bold text-slate-700">Geografi</span></li>
+                            <li class="flex flex-col"><span class="text-[10px] text-slate-400 font-display tracking-widest">12.00 - 13.20</span> <span class="font-bold text-slate-700">Ekonomi</span></li>
+                            <li class="flex flex-col"><span class="text-[10px] text-slate-400 font-display tracking-widest">13.20 - 14.30</span> <span class="font-bold text-slate-700">Sosiologi</span></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Rabu -->
+                <div class="game-card p-6 border-t-4 border-t-blue-400 flex flex-col relative overflow-hidden group">
+                    <div class="absolute -right-4 -top-4 text-blue-500 opacity-5 group-hover:scale-150 transition duration-500"><i data-lucide="droplets" class="w-32 h-32"></i></div>
+                    <div class="relative z-10">
+                        <div class="flex justify-between items-center mb-5 pb-3 border-b border-slate-100/50">
+                            <h3 class="font-bold text-blue-500 flex items-center gap-2 tracking-widest font-display text-lg"><i data-lucide="droplets" class="w-5 h-5"></i> RABU</h3>
+                            <span class="text-[10px] font-bold bg-blue-100 text-blue-700 px-2.5 py-1 rounded-md shadow-sm">Lv. 3</span>
+                        </div>
+                        <ul class="space-y-4 text-sm">
+                            <li class="flex flex-col"><span class="text-[10px] text-slate-400 font-display tracking-widest">06.45 - 08.15</span> <span class="font-bold text-blue-600 uppercase">Informatika</span></li>
+                            <li class="flex flex-col"><span class="text-[10px] text-slate-400 font-display tracking-widest">08.15 - 10.10</span> <span class="font-bold text-slate-700">Mandarin</span></li>
+                            <li class="flex flex-col"><span class="text-[10px] text-slate-400 font-display tracking-widest">10.10 - 10.50</span> <span class="font-bold text-slate-700">Sosiologi</span></li>
+                            <li class="flex flex-col"><span class="text-[10px] text-slate-400 font-display tracking-widest">10.50 - 11.30</span> <span class="font-bold text-slate-700">B. Indonesia</span></li>
+                            <li class="flex flex-col"><span class="text-[10px] text-slate-400 font-display tracking-widest">11.30 - 12.10</span> <span class="font-bold text-slate-700">Kokurikuler</span></li>
+                            <li class="flex flex-col"><span class="text-[10px] text-slate-400 font-display tracking-widest">12.40 - 14.00</span> <span class="font-bold text-slate-700">Sejarah</span></li>
+                            <li class="flex flex-col"><span class="text-[10px] text-slate-400 font-display tracking-widest">14.00 - 15.20</span> <span class="font-bold text-slate-700">Seni Budaya</span></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Kamis -->
+                <div class="game-card p-6 border-t-4 border-t-purple-400 flex flex-col relative overflow-hidden group">
+                    <div class="absolute -right-4 -top-4 text-purple-500 opacity-5 group-hover:scale-150 transition duration-500"><i data-lucide="moon" class="w-32 h-32"></i></div>
+                    <div class="relative z-10">
+                        <div class="flex justify-between items-center mb-5 pb-3 border-b border-slate-100/50">
+                            <h3 class="font-bold text-purple-500 flex items-center gap-2 tracking-widest font-display text-lg"><i data-lucide="moon" class="w-5 h-5"></i> KAMIS</h3>
+                            <span class="text-[10px] font-bold bg-purple-100 text-purple-700 px-2.5 py-1 rounded-md shadow-sm">Lv. 4</span>
+                        </div>
+                        <ul class="space-y-4 text-sm">
+                            <li class="flex flex-col"><span class="text-[10px] text-slate-400 font-display tracking-widest">06.45 - 08.15</span> <span class="font-bold text-blue-600 uppercase">Informatika</span></li>
+                            <li class="flex flex-col"><span class="text-[10px] text-slate-400 font-display tracking-widest">08.15 - 10.15</span> <span class="font-bold text-slate-700">Mat Wajib</span></li>
+                            <li class="flex flex-col"><span class="text-[10px] text-slate-400 font-display tracking-widest">10.15 - 11.45</span> <span class="font-bold text-slate-700">PKN</span></li>
+                            <li class="flex flex-col"><span class="text-[10px] text-slate-400 font-display tracking-widest">12.30 - 14.35</span> <span class="font-bold text-slate-700">Inggris</span></li>
+                            <li class="flex flex-col"><span class="text-[10px] text-slate-400 font-display tracking-widest">14.35 - 15.15</span> <span class="font-bold text-slate-700">Ekonomi</span></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Jumat -->
+                <div class="game-card p-6 border-t-4 border-t-rose-400 flex flex-col relative overflow-hidden group">
+                    <div class="absolute -right-4 -top-4 text-rose-500 opacity-5 group-hover:scale-150 transition duration-500"><i data-lucide="flame" class="w-32 h-32"></i></div>
+                    <div class="relative z-10">
+                        <div class="flex justify-between items-center mb-5 pb-3 border-b border-slate-100/50">
+                            <h3 class="font-bold text-rose-500 flex items-center gap-2 tracking-widest font-display text-lg"><i data-lucide="flame" class="w-5 h-5"></i> JUMAT</h3>
+                            <span class="text-[10px] font-bold bg-rose-100 text-rose-700 px-2.5 py-1 rounded-md shadow-sm">Lv. MAX</span>
+                        </div>
+                        <ul class="space-y-4 text-sm">
+                            <li class="flex flex-col"><span class="text-[10px] text-slate-400 font-display tracking-widest">06.30 - 07.15</span> <span class="font-bold text-slate-700">Kegiatan Jumat</span></li>
+                            <li class="flex flex-col"><span class="text-[10px] text-slate-400 font-display tracking-widest">07.15 - 08.45</span> <span class="font-bold text-slate-700">PKWU</span></li>
+                            <li class="flex flex-col"><span class="text-[10px] text-slate-400 font-display tracking-widest">09.15 - 10.45</span> <span class="font-bold text-slate-700">PJOK</span></li>
+                            <li class="flex flex-col"><span class="text-[10px] text-slate-400 font-display tracking-widest">10.45 - 11.30</span> <span class="font-bold text-slate-700">B. Konseling</span></li>
+                            <li class="flex flex-col"><span class="text-[10px] text-rose-400 font-display tracking-widest">11.30 - 12.30</span> <span class="font-bold text-rose-500 uppercase">Jumat Ibadah</span></li>
+                            <li class="flex flex-col"><span class="text-[10px] text-slate-400 font-display tracking-widest">13.00 - 14.30</span> <span class="font-bold text-slate-700">Geografi</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
