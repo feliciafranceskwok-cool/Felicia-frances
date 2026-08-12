@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Felicia Frances Kwok | Portfolio & Tugas</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome untuk Ikon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js untuk Grafik -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'soft-blue': '#BDE0FE',
+                        'soft-pink': '#FFC8DD',
+                        'cream': '#FFF9E6',
+                        'dark-accent': '#2C3E50',
+                    },
+                    fontFamily: {
+                        'sans': ['Outfit', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body {
+            background-color: #FFF9E6; /* Cream light */
+            background-image: radial-gradient(#FFC8DD 1px, transparent 1px), radial-gradient(#BDE0FE 1px, transparent 1px);
+            background-size: 40px 40px;
+            background-position: 0 0, 20px 20px;
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+        }
+
+        .nav-item {
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-item::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 3px;
+            bottom: -4px;
+            left: 0;
+            background-color: #FFC8DD;
+            transition: width 0.3s ease;
+        }
+
+        .nav-item:hover::after, .nav-item.active::after {
+            width: 100%;
+        }
+
+        .section-page {
+            display: none;
+            animation: fadeIn 0.6s ease-in-out;
+        }
+
+        .section-page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Styling untuk tabel jadwal */
+        .schedule-table th {
+            background-color: #BDE0FE;
+            color: #2C3E50;
+        }
+        .schedule-table tr:nth-child(even) {
+            background-color: rgba(255, 200, 221, 0.2);
+        }
+        .schedule-table tr:hover {
+            background-color: rgba(189, 224, 254, 0.4);
+        }
+    </style>
+</head>
+<body class="text-dark-accent flex flex-col min-h-screen">
+
+    <!-- Navigation -->
+    <nav class="glass-card sticky top-0 z-50 px-6 py-4 mb-8">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center">
+            <div class="text-2xl font-extrabold tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-pink-500 mb-4 md:mb-0">
+                FELICIA.
+            </div>
+            <ul class="flex flex-wrap justify-center space-x-6 md:space-x-8 font-semibold text-gray-700">
+                <li class="nav-item active" onclick="switchPage('dashboard', this)">Dashboard</li>
+                <li class="nav-item" onclick="switchPage('profil', this)">Profil</li>
+                <li class="nav-item" onclick="switchPage('informatika', this)">Informatika</li>
+                <li class="nav-item" onclick="switchPage('bahasaindonesia', this)">Bahasa Indonesia</li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full mb-12">
+
+        <!-- DASHBOARD SECTION -->
+        <section id="dashboard" class="section-page active">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Hero Text -->
+                <div class="glass-card rounded-3xl p-10 flex flex-col justify-center transform transition duration-500 hover:scale-[1.02]">
+                    <span class="text-sm font-bold tracking-widest text-pink-500 uppercase mb-2">Web Developer & Student</span>
+                    <h1 class="text-5xl font-extrabold mb-4 leading-tight">
+                        Hi, I'm <br>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-pink-500">Felicia Frances Kwok</span>
+                    </h1>
+                    <p class="text-gray-600 mb-8 leading-relaxed">
+                        Selamat datang di website portofolio dan kumpulan tugas sekolah saya. Sebagai seorang web developer yang antusias, saya merancang ruang ini untuk membagikan progres belajar dan proyek-proyek saya.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="mailto:emailanda@gmail.com" class="w-12 h-12 rounded-full bg-soft-blue flex items-center justify-center text-dark-accent hover:bg-blue-300 transition shadow-lg text-xl" title="Email">
+                            <i class="fa-solid fa-envelope"></i>
+                        </a>
+                        <a href="https://wa.me/6281234567890" target="_blank" class="w-12 h-12 rounded-full bg-green-200 flex items-center justify-center text-green-700 hover:bg-green-300 transition shadow-lg text-xl" title="WhatsApp">
+                            <i class="fa-brands fa-whatsapp"></i>
+                        </a>
+                        <a href="https://instagram.com/username_anda" target="_blank" class="w-12 h-12 rounded-full bg-soft-pink flex items-center justify-center text-pink-600 hover:bg-pink-300 transition shadow-lg text-xl" title="Instagram">
+                            <i class="fa-brands fa-instagram"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Graphic / Chart -->
+                <div class="glass-card rounded-3xl p-8 flex flex-col items-center justify-center">
+                    <h2 class="text-2xl font-bold mb-4">Statistik Minat Belajar</h2>
+                    <div class="w-full h-64 relative">
+                        <canvas id="skillsChart"></canvas>
+                    </div>
+                    <p class="text-sm text-gray-500 mt-4 italic">*Grafik distribusi fokus mata pelajaran saya saat ini.</p>
+                </div>
+            </div>
+
+            <!-- Jadwal Pelajaran -->
+            <div class="glass-card rounded-3xl p-8 mt-12">
+                <h2 class="text-3xl font-extrabold mb-6 text-center">📚 Jadwal Kelas XI-3</h2>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Senin & Selasa -->
+                    <div>
+                        <h3 class="text-xl font-bold mb-3 flex items-center"><span class="w-3 h-3 rounded-full bg-yellow-400 mr-2"></span> SENIN</h3>
+                        <div class="overflow-x-auto rounded-xl border border-blue-100 mb-6">
+                            <table class="w-full text-left border-collapse schedule-table">
+                                <thead><tr><th class="p-3">Jam</th><th class="p-3">Pelajaran</th></tr></thead>
+                                <tbody>
+                                    <tr><td class="p-3 border-t border-blue-50">06.30–07.30</td><td class="p-3 border-t border-blue-50">Upacara/Wali Kelas</td></tr>
+                                    <tr><td class="p-3 border-t border-blue-50">07.30–09.00</td><td class="p-3 border-t border-blue-50">Sosiologi</td></tr>
+                                    <tr class="bg-gray-50 font-bold"><td class="p-3 border-t border-blue-50">09.00–09.30</td><td class="p-3 border-t border-blue-50 text-pink-500">Istirahat</td></tr>
+                                    <tr><td class="p-3 border-t border-blue-50">09.30–10.50</td><td class="p-3 border-t border-blue-50">Mandarin</td></tr>
+                                    <tr><td class="p-3 border-t border-blue-50">10.50–12.10</td><td class="p-3 border-t border-blue-50">Budi Pekerti</td></tr>
+                                    <tr class="bg-gray-50 font-bold"><td class="p-3 border-t border-blue-50">12.10–12.40</td><td class="p-3 border-t border-blue-50 text-pink-500">Istirahat</td></tr>
+                                    <tr><td class="p-3 border-t border-blue-50">12.40–13.20</td><td class="p-3 border-t border-blue-50">Mat Wajib</td></tr>
+                                    <tr><td class="p-3 border-t border-blue-50">13.20–14.40</td><td class="p-3 border-t border-blue-50">Ekonomi</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <h3 class="text-xl font-bold mb-3 flex items-center"><span class="w-3 h-3 rounded-full bg-green-400 mr-2"></span> SELASA</h3>
+                        <div class="overflow-x-auto rounded-xl border border-blue-100">
+                            <table class="w-full text-left border-collapse schedule-table">
+                                <thead><tr><th class="p-3">Jam</th><th class="p-3">Pelajaran</th></tr></thead>
+                                <tbody>
+                                    <tr><td class="p-3 border-t border-blue-50">06.30–06.45</td><td class="p-3 border-t border-blue-50">Pembiasaan Awal</td></tr>
+                                    <tr><td class="p-3 border-t border-blue-50">06.45–08.15</td><td class="p-3 border-t border-blue-50">Agama</td></tr>
+                                    <tr><td class="p-3 border-t border-blue-50">08.15–09.45</td><td class="p-3 border-t border-blue-50">B. Indonesia</td></tr>
+                                    <tr class="bg-gray-50 font-bold"><td class="p-3 border-t border-blue-50">09.45–10.05</td><td class="p-3 border-t border-blue-50 text-pink-500">Istirahat</td></tr>
+                                    <tr><td class="p-3 border-t border-blue-50">10.05–11.35</td><td class="p-3 border-t border-blue-50">Geografi</td></tr>
+                                    <tr class="bg-gray-50 font-bold"><td class="p-3 border-t border-blue-50">11.35–12.00</td><td class="p-3 border-t border-blue-50 text-pink-500">Istirahat</td></tr>
+                                    <tr><td class="p-3 border-t border-blue-50">12.00–13.20</td><td class="p-3 border-t border-blue-50">Ekonomi</td></tr>
+                                    <tr><td class="p-3 border-t border-blue-50">13.20–14.30</td><td class="p-3 border-t border-blue-50">Sosiologi</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Rabu, Kamis, Jumat -->
+                    <div>
+                        <h3 class="text-xl font-bold mb-3 flex items-center"><span class="w-3 h-3 rounded-full bg-blue-400 mr-2"></span> RABU</h3>
+                        <div class="overflow-x-auto rounded-xl border border-blue-100 mb-6">
+                            <table class="w-full text-left border-collapse schedule-table">
+                                <thead><tr><th class="p-3">Jam</th><th class="p-3">Pelajaran</th></tr></thead>
+                                <tbody>
+                                    <tr><td class="p-3 border-t border-blue-50">06.45–08.15</td><td class="p-3 border-t border-blue-50">Informatika</td></tr>
+                                    <tr><td class="p-3 border-t border-blue-50">08.15–09.00</td><td class="p-3 border-t border-blue-50">Mandarin</td></tr>
+                                    <tr class="bg-gray-50 font-bold"><td class="p-3 border-t border-blue-50">09.00–09.30</td><td class="p-3 border-t border-blue-50 text-pink-500">Istirahat</td></tr>
+                                    <tr><td class="p-3 border-t border-blue-50">09.30–10.10</td><td class="p-3 border-t border-blue-50">Mandarin</td></tr>
+                                    <tr><td class="p-3 border-t border-blue-50">10.10–10.50</td><td class="p-3 border-t border-blue-50">Sosiologi</td></tr>
+                                    <tr><td class="p-3 border-t border-blue-50">10.50–11.30</td><td class="p-3 border-t border-blue-50">B. Indonesia</td></tr>
+                                    <tr><td class="p-3 border-t border-blue-50">12.40–14.00</td><td class="p-3 border-t border-blue-50">Sejarah</td></tr>
+                                    <tr><td class="p-3 border-t border-blue-50">14.00–15.20</td><td class="p-3 border-t border-blue-50">Seni Budaya</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <h3 class="text-xl font-bold mb-3 flex items-center"><span class="w-3 h-3 rounded-full bg-purple-400 mr-2"></span> KAMIS</h3>
+                        <div class="overflow-x-auto rounded-xl border border-blue-100 mb-6">
+                            <table class="w-full text-left border-collapse schedule-table">
+                                <thead><tr><th class="p-3">Jam</th><th class="p-3">Pelajaran</th></tr></thead>
+                                <tbody>
+                                    <tr><td class="p-3 border-t border-blue-50">06.30–06.45</td><td class="p-3 border-t border-blue-50">Pembiasaan Awal</td></tr>
+                                    <tr><td class="p-3 border-t border-blue-50">06.45–08.15</td><td class="p-3 border-t border-blue-50">Informatika</td></tr>
+                                    <tr><td class="p-3 border-t border-blue-50">08.15–09.00</td><td class="p-3 border-t border-blue-50">Mat Wajib</td></tr>
+                                    <tr class="bg-gray-50 font-bold"><td class="p-3 border-t border-blue-50">09.00–09.30</td><td class="p-3 border-t border-blue-50 text-pink-500">Istirahat</td></tr>
+                                    <tr><td class="p-3 border-t border-blue-50">09.30–10.15</td><td class="p-3 border-t border-blue-50">Mat Wajib</td></tr>
+                                    <tr><td class="p-3 border-t border-blue-50">10.15–11.45</td><td class="p-3 border-t border-blue-50">PKN</td></tr>
+                                    <tr class="bg-gray-50 font-bold"><td class="p-3 border-t border-blue-50">11.45–12.30</td><td class="p-3 border-t border-blue-50 text-pink-500">Istirahat</td></tr>
+                                    <tr><td class="p-3 border-t border-blue-50">12.30–14.35</td><td class="p-3 border-t border-blue-50">Inggris</td></tr>
+                                    <tr><td class="p-3 border-t border-blue-50">14.35–15.15</td><td class="p-3 border-t border-blue-50">Ekonomi</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <h3 class="text-xl font-bold mb-3 flex items-center"><span class="w-3 h-3 rounded-full bg-red-400 mr-2"></span> JUMAT</h3>
+                        <div class="overflow-x-auto rounded-xl border border-blue-100">
+                            <table class="w-full text-left border-collapse schedule-table">
+                                <thead><tr><th class="p-3">Jam</th><th class="p-3">Pelajaran</th></tr></thead>
+                                <tbody>
+                                    <tr><td class="p-3 border-t border-blue-50">06.30–07.15</td><td class="p-3 border-t border-blue-50">Jumat Bersih/Sehat</td></tr>
+                                    <tr><td class="p-3 border-t border-blue-50">07.15–08.45</td><td class="p-3 border-t border-blue-50">PKWU</td></tr>
+                                    <tr class="bg-gray-50 font-bold"><td class="p-3 border-t border-blue-50">08.45–09.15</td><td class="p-3 border-t border-blue-50 text-pink-500">Istirahat</td></tr>
+                                    <tr><td class="p-3 border-t border-blue-50">09.15–10.45</td><td class="p-3 border-t border-blue-50">PJOK</td></tr>
+                                    <tr><td class="p-3 border-t border-blue-50">10.45–11.30</td><td class="p-3 border-t border-blue-50">B. Konseling</td></tr>
+                                    <tr><td class="p-3 border-t border-blue-50">11.30–12.30</td><td class="p-3 border-t border-blue-50">Jumat Ibadah</td></tr>
+                                    <tr class="bg-gray-50 font-bold"><td class="p-3 border-t border-blue-50">12.30–13.00</td><td class="p-3 border-t border-blue-50 text-pink-500">Istirahat</td></tr>
+                                    <tr><td class="p-3 border-t border-blue-50">13.00–14.30</td><td class="p-3 border-t border-blue-50">Geografi</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PROFIL SECTION -->
+        <section id="profil" class="section-page">
+            <div class="glass-card rounded-3xl p-10 max-w-4xl mx-auto flex flex-col md:flex-row items-center gap-10">
+                <div class="w-64 h-64 flex-shrink-0">
+                    <!-- Ganti 'profile.jpg' dengan path gambar yang diupload atau biarkan kosong jika file di folder sama -->
+                    <img src="profile.jpg" alt="Felicia Frances Kwok" onerror="this.src='https://ui-avatars.com/api/?name=Felicia+Kwok&background=FFC8DD&color=fff&size=512'" class="w-full h-full object-cover rounded-full shadow-2xl border-4 border-white">
+                </div>
+                <div>
+                    <h2 class="text-4xl font-bold mb-2">Felicia Frances Kwok</h2>
+                    <p class="text-xl text-pink-500 font-semibold mb-6">SMA CINTA KASIH TZU CHI 11.3</p>
+                    
+                    <div class="space-y-4 text-gray-700">
+                        <p class="flex items-center"><i class="fa-solid fa-graduation-cap w-8 text-blue-400 text-xl"></i> Siswi Kelas XI-3</p>
+                        <p class="flex items-center"><i class="fa-solid fa-code w-8 text-blue-400 text-xl"></i> Web Developer Enthusiast</p>
+                        <p class="flex items-center"><i class="fa-solid fa-envelope w-8 text-blue-400 text-xl"></i> email.felicia@gmail.com</p>
+                        <p class="flex items-center"><i class="fa-brands fa-whatsapp w-8 text-blue-400 text-xl"></i> +62 812-3456-7890</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- INFORMATIKA SECTION -->
+        <section id="informatika" class="section-page">
+            <div class="glass-card rounded-3xl p-10 mb-8">
+                <div class="flex justify-between items-center mb-6 border-b pb-4 border-gray-200">
+                    <h2 class="text-3xl font-extrabold text-blue-600"><i class="fa-solid fa-laptop-code mr-3"></i>Materi & Tugas Informatika</h2>
+                    
+                    <!-- Tombol Upload -->
+                    <button onclick="requestUpload('Informatika')" class="bg-gradient-to-r from-blue-400 to-blue-500 hover:from-blue-500 hover:to-blue-600 text-white font-bold py-2 px-6 rounded-full shadow-lg transform transition hover:-translate-y-1">
+                        <i class="fa-solid fa-cloud-arrow-up mr-2"></i> Upload Tugas
+                    </button>
+                </div>
+
+                <!-- Form Upload (Tersembunyi, butuh password) -->
+                <div id="uploadForm-Informatika" class="hidden bg-blue-50 rounded-xl p-6 mb-8 border border-blue-200">
+                    <h3 class="font-bold text-lg mb-4 text-blue-800">Admin Panel: Upload Tugas Informatika</h3>
+                    <div class="flex flex-col md:flex-row gap-4 items-center">
+                        <input type="text" id="uploadTitle-Informatika" placeholder="Judul Tugas" class="flex-1 p-2 rounded border border-gray-300 focus:outline-none focus:border-blue-400">
+                        <input type="file" id="uploadFile-Informatika" class="flex-1 p-2 bg-white rounded border border-gray-300">
+                        <button onclick="submitTask('Informatika')" class="bg-green-500 text-white px-6 py-2 rounded font-bold hover:bg-green-600">Simpan</button>
+                    </div>
+                </div>
+
+                <!-- Artikel Materi Kurikulum Merdeka -->
+                <article class="prose prose-lg max-w-none text-gray-700">
+                    <span class="inline-block bg-pink-100 text-pink-600 px-3 py-1 rounded-full text-xs font-bold mb-3">Artikel Kelas 10 Kurikulum Merdeka</span>
+                    <h3 class="text-2xl font-bold mb-4 text-dark-accent">Pengenalan Kriptografi Dasar</h3>
+                    <p class="mb-4">
+                        Kriptografi adalah ilmu dan seni untuk menjaga kerahasiaan pesan (data) dengan cara menyandikannya ke dalam bentuk yang tidak dapat dimengerti lagi maknanya. Dalam Kurikulum Merdeka kelas 10, siswa diajak memahami bahwa data di dunia digital perlu dilindungi.
+                    </p>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 mb-6 flex items-start">
+                        <div class="text-4xl mr-4 text-blue-300"><i class="fa-solid fa-shield-halved"></i></div>
+                        <div>
+                            <h4 class="font-bold mb-2">Mengapa Kriptografi Penting?</h4>
+                            <ul class="list-disc list-inside space-y-1">
+                                <li><strong>Kerahasiaan (Confidentiality):</strong> Mencegah pihak yang tidak berhak membaca data.</li>
+                                <li><strong>Integritas (Integrity):</strong> Memastikan data tidak diubah selama transmisi.</li>
+                                <li><strong>Otentikasi (Authentication):</strong> Memastikan pengirim adalah pihak yang sebenarnya.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <p class="mb-4">
+                        Salah satu teknik enkripsi tertua yang dipelajari adalah <em>Caesar Cipher</em>, dimana setiap huruf pada teks asli (plaintext) digeser sejumlah posisi tertentu dalam alfabet untuk menghasilkan teks rahasia (ciphertext).
+                    </p>
+                </article>
+
+                <!-- Link Google Sites -->
+                <div class="mt-8 p-6 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-2xl shadow-lg text-white flex flex-col md:flex-row justify-between items-center transform transition hover:-translate-y-1">
+                    <div class="mb-4 md:mb-0">
+                        <h3 class="text-xl font-bold mb-1"><i class="fa-brands fa-google mr-2"></i> Arsip Google Sites</h3>
+                        <p class="text-blue-100 text-sm">Kunjungi proyek dan portofolio Informatika saya sebelumnya di Google Sites.</p>
+                    </div>
+                    <a href="https://sites.google.com/view/feliciafrancesx-2/welcome-%E1%90%9F-%E1%90%9F" target="_blank" class="bg-white text-blue-600 font-bold py-3 px-8 rounded-full shadow hover:bg-blue-50 transition flex items-center">
+                        Kunjungi Web <i class="fa-solid fa-arrow-up-right-from-square ml-2"></i>
+                    </a>
+                </div>
+
+                <!-- Daftar Tugas -->
+                <h3 class="text-xl font-bold mt-10 mb-4 border-b pb-2">Daftar Tugas Tersimpan</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4" id="taskList-Informatika">
+                    <div class="bg-white p-4 rounded-lg shadow border border-gray-100 flex items-center justify-between">
+                        <div class="flex items-center"><i class="fa-solid fa-file-pdf text-red-500 text-2xl mr-4"></i><div><p class="font-bold">Tugas_Algoritma.pdf</p><p class="text-xs text-gray-500">Diunggah: 12 Ags 2026</p></div></div>
+                        <button class="text-blue-500 hover:text-blue-700"><i class="fa-solid fa-download"></i></button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- BAHASA INDONESIA SECTION -->
+        <section id="bahasaindonesia" class="section-page">
+            <div class="glass-card rounded-3xl p-10 mb-8">
+                <div class="flex justify-between items-center mb-6 border-b pb-4 border-gray-200">
+                    <h2 class="text-3xl font-extrabold text-pink-600"><i class="fa-solid fa-book-open mr-3"></i>Tugas Bahasa Indonesia</h2>
+                    
+                    <!-- Tombol Upload -->
+                    <button onclick="requestUpload('Bahasa')" class="bg-gradient-to-r from-pink-400 to-pink-500 hover:from-pink-500 hover:to-pink-600 text-white font-bold py-2 px-6 rounded-full shadow-lg transform transition hover:-translate-y-1">
+                        <i class="fa-solid fa-cloud-arrow-up mr-2"></i> Upload Tugas
+                    </button>
+                </div>
+
+                <!-- Form Upload (Tersembunyi, butuh password) -->
+                <div id="uploadForm-Bahasa" class="hidden bg-pink-50 rounded-xl p-6 mb-8 border border-pink-200">
+                    <h3 class="font-bold text-lg mb-4 text-pink-800">Admin Panel: Upload Tugas Bahasa Indonesia</h3>
+                    <div class="flex flex-col md:flex-row gap-4 items-center">
+                        <input type="text" id="uploadTitle-Bahasa" placeholder="Judul Tugas" class="flex-1 p-2 rounded border border-gray-300 focus:outline-none focus:border-pink-400">
+                        <input type="file" id="uploadFile-Bahasa" class="flex-1 p-2 bg-white rounded border border-gray-300">
+                        <button onclick="submitTask('Bahasa')" class="bg-green-500 text-white px-6 py-2 rounded font-bold hover:bg-green-600">Simpan</button>
+                    </div>
+                </div>
+
+                <!-- Artikel/Catatan -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-pink-100 mb-8 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-4 text-pink-200 opacity-50 text-6xl"><i class="fa-solid fa-quote-right"></i></div>
+                    <h3 class="text-xl font-bold mb-3 z-10 relative">Materi Resensi Buku</h3>
+                    <p class="text-gray-700 relative z-10">
+                        Resensi merupakan suatu tulisan atau ulasan mengenai nilai sebuah karya atau buku. Tujuan resensi adalah menyampaikan kepada pembaca apakah sebuah buku layak dibaca atau tidak.
+                    </p>
+                </div>
+
+                <!-- Daftar Tugas -->
+                <h3 class="text-xl font-bold mt-6 mb-4 border-b pb-2">Daftar Tugas Tersimpan</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4" id="taskList-Bahasa">
+                    <div class="bg-white p-4 rounded-lg shadow border border-gray-100 flex items-center justify-between">
+                        <div class="flex items-center"><i class="fa-solid fa-file-word text-blue-500 text-2xl mr-4"></i><div><p class="font-bold">Makalah_Resensi.docx</p><p class="text-xs text-gray-500">Diunggah: 5 Sep 2026</p></div></div>
+                        <button class="text-blue-500 hover:text-blue-700"><i class="fa-solid fa-download"></i></button>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg shadow border border-gray-100 flex items-center justify-between">
+                        <div class="flex items-center"><i class="fa-solid fa-file-pdf text-red-500 text-2xl mr-4"></i><div><p class="font-bold">Puisi_Kemerdekaan.pdf</p><p class="text-xs text-gray-500">Diunggah: 17 Ags 2026</p></div></div>
+                        <button class="text-blue-500 hover:text-blue-700"><i class="fa-solid fa-download"></i></button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white/50 backdrop-blur-md border-t border-white/50 py-6 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p class="font-semibold text-gray-600">Felicia Frances kwok © 2026 SMA CINTA KASIH TZU CHI 11.3</p>
+        </div>
+    </footer>
+
+    <!-- Logika Javascript -->
+    <script>
+        // Navigasi SPA (Single Page Application)
+        function switchPage(pageId, element) {
+            // Sembunyikan semua halaman
+            document.querySelectorAll('.section-page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Hapus status active dari semua menu navigasi
+            document.querySelectorAll('.nav-item').forEach(nav => {
+                nav.classList.remove('active');
+            });
+            
+            // Tampilkan halaman yang dipilih
+            document.getElementById(pageId).classList.add('active');
+            
+            // Berikan status active pada menu yang diklik
+            element.classList.add('active');
+        }
+
+        // Keamanan Upload (Simulasi Frontend)
+        const ADMIN_PASSWORD = "feliciafrances"; // Password untuk mengedit
+
+        function requestUpload(subject) {
+            let pass = prompt(`Masukkan password author untuk upload tugas di halaman ${subject}:`);
+            
+            if (pass === ADMIN_PASSWORD) {
+                alert("Akses diberikan! Silakan unggah tugas Anda.");
+                document.getElementById(`uploadForm-${subject}`).classList.remove('hidden');
+            } else if (pass !== null) {
+                alert("Akses ditolak! Hanya Felicia Frances Kwok yang dapat mengunggah atau mengedit data.");
+            }
+        }
+
+        function submitTask(subject) {
+            const titleInput = document.getElementById(`uploadTitle-${subject}`);
+            const fileInput = document.getElementById(`uploadFile-${subject}`);
+            
+            if (!titleInput.value || !fileInput.files.length) {
+                alert("Mohon isi judul dan pilih file tugas terlebih dahulu!");
+                return;
+            }
+
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                const base64Data = e.target.result;
+                const taskData = {
+                    id: Date.now(),
+                    title: titleInput.value,
+                    filename: file.name,
+                    date: new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }),
+                    dataUrl: base64Data
+                };
+
+                // Simpan ke localStorage
+                let savedTasks = JSON.parse(localStorage.getItem(`tasks_${subject}`)) || [];
+                savedTasks.push(taskData);
+                localStorage.setItem(`tasks_${subject}`, JSON.stringify(savedTasks));
+
+                alert(`Tugas ${subject} berhasil disimpan!`);
+                document.getElementById(`uploadForm-${subject}`).classList.add('hidden');
+                
+                // Reset form
+                titleInput.value = '';
+                fileInput.value = '';
+
+                // Tampilkan task yang baru
+                renderTask(subject, taskData);
+            };
+
+            reader.readAsDataURL(file);
+        }
+
+        function renderTask(subject, task) {
+            const listContainer = document.getElementById(`taskList-${subject}`);
+            
+            // Tentukan ikon berdasarkan subjek
+            const iconColor = subject === 'Informatika' ? 'text-red-500' : 'text-blue-500';
+            const iconType = 'fa-file-lines'; // Generic file icon
+
+            const taskHtml = `
+                <div class="bg-white p-4 rounded-lg shadow border border-gray-100 flex items-center justify-between" id="task-${task.id}">
+                    <div class="flex items-center">
+                        <i class="fa-solid ${iconType} ${iconColor} text-2xl mr-4"></i>
+                        <div>
+                            <p class="font-bold">${task.title}</p>
+                            <p class="text-xs text-gray-500">Diunggah: ${task.date} | ${task.filename}</p>
+                        </div>
+                    </div>
+                    <a href="${task.dataUrl}" download="${task.filename}" class="text-blue-500 hover:text-blue-700 bg-blue-50 p-2 rounded-full cursor-pointer" title="Download">
+                        <i class="fa-solid fa-download"></i>
+                    </a>
+                </div>
+            `;
+            listContainer.insertAdjacentHTML('beforeend', taskHtml);
+        }
+
+        function loadSavedTasks() {
+            ['Informatika', 'Bahasa'].forEach(subject => {
+                let savedTasks = JSON.parse(localStorage.getItem(`tasks_${subject}`)) || [];
+                savedTasks.forEach(task => renderTask(subject, task));
+            });
+        }
+
+        // Panggil fungsi saat halaman dimuat
+        document.addEventListener('DOMContentLoaded', loadSavedTasks);
+
+        // Inisialisasi Grafik Chart.js
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctx = document.getElementById('skillsChart').getContext('2d');
+            const myChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Informatika (Web Dev)', 'Matematika', 'B. Indonesia', 'Sosiologi'],
+                    datasets: [{
+                        label: 'Minat Belajar (%)',
+                        data: [45, 20, 15, 20],
+                        backgroundColor: [
+                            'rgba(189, 224, 254, 0.8)', // soft-blue
+                            'rgba(255, 200, 221, 0.8)', // soft-pink
+                            'rgba(255, 249, 230, 0.8)', // cream
+                            'rgba(162, 210, 255, 0.8)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 255, 255, 1)',
+                            'rgba(255, 255, 255, 1)',
+                            'rgba(255, 255, 255, 1)',
+                            'rgba(255, 255, 255, 1)'
+                        ],
+                        borderWidth: 2,
+                        hoverOffset: 10
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'right' }
+                    },
+                    cutout: '70%'
+                }
+            });
+        });
+    </script>
+</body>
+</html>
