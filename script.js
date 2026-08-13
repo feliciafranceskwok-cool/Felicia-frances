@@ -39,13 +39,13 @@
     // =====================================================================
     // § B — GLOBAL STATE
     // =====================================================================
-    const DEFAULT_COVER = 'download (8).jpg';
+    const DEFAULT_COVER = 'music-cover.jpg';
 
     const DEFAULT_YT = [
-        { id:100, youtubeId:'TdVS69vxap8', title:'The Music Freaks Ep.1 | RosyClozy',              artist:'RosyClozy',             thumbnail:'https://img.youtube.com/vi/TdVS69vxap8/hqdefault.jpg' },
-        { id:101, youtubeId:'jL4dEUtZ40E', title:'Hatsune Miku – World is Mine (Miku Expo Live)', artist:'Hatsune Miku Official', thumbnail:'https://img.youtube.com/vi/jL4dEUtZ40E/hqdefault.jpg' },
-        { id:102, youtubeId:'QH2-TGUlwu4', title:'Nyan Cat [ORIGINAL]',                           artist:'NyanCat',               thumbnail:'https://img.youtube.com/vi/QH2-TGUlwu4/hqdefault.jpg' },
-        { id:103, youtubeId:'3tmd-ClpJxA', title:'YOASOBI – 夜に駆ける (Into The Night) Official MV', artist:'Ayase / YOASOBI',   thumbnail:'https://img.youtube.com/vi/3tmd-ClpJxA/hqdefault.jpg' }
+        { id:100, youtubeId:'TdVS69vxap8', title:'The Music Freaks Ep.1 | RosyClozy', artist:'RosyClozy', thumbnail:'https://img.youtube.com/vi/TdVS69vxap8/hqdefault.jpg' },
+        { id:101, youtubeId:'S2O6-L-Wq7g', title:'The Music Freaks Ep.2 | RosyClozy', artist:'RosyClozy', thumbnail:'https://img.youtube.com/vi/S2O6-L-Wq7g/hqdefault.jpg' },
+        { id:102, youtubeId:'2bXnZk8i0yQ', title:'The Music Freaks Ep.3 | RosyClozy', artist:'RosyClozy', thumbnail:'https://img.youtube.com/vi/2bXnZk8i0yQ/hqdefault.jpg' },
+        { id:103, youtubeId:'v8dEa2rA0Z0', title:'The Music Freaks Ep.4 | RosyClozy', artist:'RosyClozy', thumbnail:'https://img.youtube.com/vi/v8dEa2rA0Z0/hqdefault.jpg' }
     ];
 
     let playlist      = [];
@@ -55,21 +55,22 @@
     let globalAudio   = null;   // lives in <body>, never destroyed
     let _initialized  = false;
 
-    // Load persisted data
-    try { playlist  = JSON.parse(localStorage.getItem('felicia_playlist')) || []; } catch(_){}
-    if (!playlist.length) {
-        playlist = [{ id:'default_1', title:'Miku Theme', artist:'Hatsune Miku', cover:'download (9).jpg', src:'https://files.catbox.moe/jaknuq.mp3', type:'url' }];
+    // Permanent default playlist (Ed Sheeran & Taylor Swift)
+    const PERMANENT_PLAYLIST = [
+        { id:'song_perfect',   title:'Perfect',    artist:'Ed Sheeran',   src:'Ed Sheeran - Perfect.mp3',                type:'url' },
+        { id:'song_lovestory', title:'Love Story', artist:'Taylor Swift',  src:'Taylor Swift - Love Story (Lyrics) (1).mp3', type:'url' }
+    ];
+
+    // Load persisted data or set permanent default
+    try { playlist = JSON.parse(localStorage.getItem('felicia_playlist')) || []; } catch(_){}
+    if (!playlist.length || !playlist.some(s => s.title === 'Perfect' || s.title === 'Love Story')) {
+        playlist = PERMANENT_PLAYLIST;
+        try { localStorage.setItem('felicia_playlist', JSON.stringify(playlist)); } catch(_){}
     }
-    try { ytVideos = JSON.parse(localStorage.getItem('felicia_youtube')); } catch(_){}
-    if (!ytVideos || !ytVideos.length) {
-        ytVideos = DEFAULT_YT;
-        try { localStorage.setItem('felicia_youtube', JSON.stringify(ytVideos)); } catch(_){}
-    }
-    // Auto-inject the RosyClozy video if it's not already in the saved list
-    if (!ytVideos.some(v => v.youtubeId === 'TdVS69vxap8')) {
-        ytVideos.unshift({ id:100, youtubeId:'TdVS69vxap8', title:'The Music Freaks Ep.1 | RosyClozy', artist:'RosyClozy', thumbnail:'https://img.youtube.com/vi/TdVS69vxap8/hqdefault.jpg' });
-        try { localStorage.setItem('felicia_youtube', JSON.stringify(ytVideos)); } catch(_){}
-    }
+
+    // Force Rozy Clozy videos only
+    ytVideos = DEFAULT_YT;
+    try { localStorage.setItem('felicia_youtube', JSON.stringify(ytVideos)); } catch(_){}
 
     // =====================================================================
     // § C — BOOTSTRAP (runs once on first DOMContentLoaded)
@@ -112,10 +113,23 @@
 
         // Keyboard shortcut: Space = play/pause when not typing
         document.addEventListener('keydown', e => {
+            if (e.target && e.target.id === 'profile-name' && e.key === 'Enter') {
+                e.preventDefault();
+                e.target.blur();
+                return;
+            }
             if (['INPUT','TEXTAREA','SELECT'].includes(e.target.tagName)) return;
+            if (e.target && e.target.isContentEditable) return;
             if (e.code === 'Space') { e.preventDefault(); togglePlay(); }
             if (e.code === 'ArrowRight') nextSong();
             if (e.code === 'ArrowLeft')  prevSong();
+        });
+
+        // Profile inline name edit (focusout / blur)
+        document.addEventListener('focusout', e => {
+            if (e.target && e.target.id === 'profile-name') {
+                saveInlineProfileName(e.target);
+            }
         });
     }
 
@@ -165,7 +179,7 @@
             if (!a) return;
             const href = a.getAttribute('href') || '';
             if (!href || href.startsWith('#') || href.startsWith('javascript:')) return;
-            if (href.startsWith('http://') || href.startsWith('https://')) return;
+            if (href.startsWith('http://') || href.startsWith('https://') || href.startsWith('mailto:')) return;
             if (a.target === '_blank') return;
             if (href.includes('.html')) {
                 e.preventDefault();
@@ -595,12 +609,12 @@
             const bg     = active ? 'linear-gradient(135deg,rgba(255,179,71,.08),rgba(100,149,237,.08))' : 'transparent';
             const titClr = active ? '#ffb347' : '#1e293b';
             c.insertAdjacentHTML('beforeend', `
-            <div onclick="playSong(${i})" style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:16px;cursor:pointer;transition:all .2s;border:1.5px solid ${bdr};background:${bg};" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='${bg}'">
-                <div style="width:42px;height:42px;border-radius:10px;overflow:hidden;background:#e2e8f0;flex-shrink:0;">
-                    <img src="${s.cover||''}" style="width:100%;height:100%;object-fit:cover;" onerror="this.src='${DEFAULT_COVER}'">
+            <div onclick="playSong(${i})" style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:16px;cursor:pointer;transition:all .2s;border:1.5px solid ${bdr};background:${bg};" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='${bg}'">
+                <div style="width:36px;height:36px;border-radius:12px;background:${active ? '#ffb347' : '#f1f5f9'};color:${active ? '#fff' : '#6495ed'};display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                    <i data-lucide="music" style="width:18px;height:18px;"></i>
                 </div>
                 <div style="overflow:hidden;flex:1;min-width:0;">
-                    <p style="font-weight:700;font-size:12px;color:${titClr};white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin:0 0 2px;">${s.title}</p>
+                    <p style="font-weight:700;font-size:13px;color:${titClr};white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin:0 0 2px;">${s.title}</p>
                     <p style="font-size:11px;color:#94a3b8;margin:0;">${s.artist}</p>
                 </div>
                 ${active ? '<span style="width:8px;height:8px;border-radius:50%;background:#ffb347;flex-shrink:0;animation:pulse 1.5s infinite;"></span>' : ''}
@@ -1003,12 +1017,7 @@
         try { const g=JSON.parse(localStorage.getItem('felicia_gallery')||'{}'); g[id]=data; localStorage.setItem('felicia_gallery',JSON.stringify(g)); } catch(_){}
     }
     function loadGallery() {
-        try {
-            const g = JSON.parse(localStorage.getItem('felicia_gallery')||'{}');
-            document.querySelectorAll('.photo-frame[data-gallery-id]').forEach(f => {
-                if (g[f.dataset.galleryId]) { const img=f.querySelector('img'); if(img)img.src=g[f.dataset.galleryId]; }
-            });
-        } catch(_){}
+        // Disabled: gallery images locked to download (8).png, download (9).png, download (10).png in HTML
     }
 
     // =====================================================================
@@ -1066,13 +1075,41 @@
     function loadProfileData() {
         try {
             const d = JSON.parse(localStorage.getItem('felicia_profile')||'null');
-            if (!d) return;
-            setEl('profile-name',  d.name);
-            setEl('profile-email', d.email);
-            setEl('profile-wa',    d.wa);
-            setEl('profile-ig',    d.ig);
-            const img = document.getElementById('profile-img');
-            if (img && d.photo) img.src = d.photo;
+            if (!d || typeof d !== 'object') return;
+
+            if (d.name && d.name !== 'undefined' && String(d.name).trim() !== '') {
+                const el = document.getElementById('profile-name');
+                if (el) el.innerText = d.name;
+            }
+            if (d.email && d.email !== 'undefined' && String(d.email).trim() !== '') {
+                const el = document.getElementById('profile-email');
+                if (el) el.innerText = d.email;
+            }
+            if (d.wa && d.wa !== 'undefined' && String(d.wa).trim() !== '') {
+                const el = document.getElementById('profile-wa');
+                if (el) el.innerText = d.wa;
+            }
+            if (d.ig && d.ig !== 'undefined' && String(d.ig).trim() !== '') {
+                const el = document.getElementById('profile-ig');
+                if (el) el.innerText = d.ig;
+            }
+            // Foto profil utama dikunci permanen di HTML ke profile (3).jpg
+        } catch(_){}
+    }
+
+    function saveInlineProfileName(el) {
+        if (!el) return;
+        let text = el.innerText.trim();
+        if (!text || text === 'undefined') {
+            text = 'Felicia Frances';
+            el.innerText = text;
+        }
+        try {
+            let d = JSON.parse(localStorage.getItem('felicia_profile') || '{}');
+            if (!d || typeof d !== 'object') d = {};
+            d.name = text;
+            localStorage.setItem('felicia_profile', JSON.stringify(d));
+            showToast('✅ Nama profil disimpan!');
         } catch(_){}
     }
     function saveProfileForm() {
@@ -1258,6 +1295,280 @@
         document.querySelectorAll('.auth-only').forEach(e=>e.classList.remove('hidden'));
         document.querySelectorAll('.btn-edit-article').forEach(e=>e.classList.remove('hidden'));
     }
+
+    // =====================================================================
+    // § W — ARCADE MINI GAMES (2048, Flappy Bird, Ular Tangga vs AI)
+    // =====================================================================
+    window.openGameModal = function(type) {
+        document.getElementById('gameActiveModal')?.remove();
+        const modal = document.createElement('div');
+        modal.id = 'gameActiveModal';
+        modal.className = 'fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-slate-900/85 backdrop-blur-md overflow-y-auto';
+
+        if (type === '2048') {
+            modal.innerHTML = `
+            <div class="bg-slate-900 border-2 border-amber-500/40 text-white p-6 rounded-[2.5rem] w-full max-w-md shadow-2xl relative flex flex-col items-center">
+                <div class="w-full flex justify-between items-center mb-4">
+                    <div class="flex items-center gap-2">
+                        <span class="text-2xl">🎲</span>
+                        <h3 class="text-xl font-bold font-display text-amber-400">Game 2048</h3>
+                    </div>
+                    <button onclick="document.getElementById('gameActiveModal').remove()" class="p-2 bg-slate-800 rounded-xl hover:bg-red-500 hover:text-white transition"><i data-lucide="x" class="w-5 h-5"></i></button>
+                </div>
+                <div class="flex justify-between w-full mb-4 px-2">
+                    <div class="bg-slate-800 px-4 py-2 rounded-xl text-center"><span class="text-[10px] text-slate-400 block uppercase">Skor</span><span id="g2048-score" class="font-bold text-lg text-amber-400">0</span></div>
+                    <button onclick="init2048Game()" class="px-4 py-2 bg-amber-500 text-slate-950 font-bold rounded-xl text-xs uppercase hover:bg-amber-400 transition">Reset</button>
+                </div>
+                <div id="g2048-board" class="grid grid-cols-4 gap-3 bg-slate-950 p-4 rounded-2xl w-full aspect-square border border-slate-800"></div>
+                <p class="text-[11px] text-slate-400 mt-4 text-center">Gunakan tombol di bawah atau Tombol Panah Keyboard!</p>
+                <div class="grid grid-cols-3 gap-2 mt-3 w-48 text-center">
+                    <div></div><button onclick="move2048('up')" class="py-2 bg-slate-800 hover:bg-slate-700 rounded-xl font-bold">▲</button><div></div>
+                    <button onclick="move2048('left')" class="py-2 bg-slate-800 hover:bg-slate-700 rounded-xl font-bold">◄</button>
+                    <button onclick="move2048('down')" class="py-2 bg-slate-800 hover:bg-slate-700 rounded-xl font-bold">▼</button>
+                    <button onclick="move2048('right')" class="py-2 bg-slate-800 hover:bg-slate-700 rounded-xl font-bold">►</button>
+                </div>
+            </div>`;
+            document.body.appendChild(modal); try { lucide.createIcons(); } catch(_){}
+            init2048Game();
+        } 
+        else if (type === 'flappy') {
+            modal.innerHTML = `
+            <div class="bg-slate-900 border-2 border-cyan-500/40 text-white p-6 rounded-[2.5rem] w-full max-w-md shadow-2xl relative flex flex-col items-center">
+                <div class="w-full flex justify-between items-center mb-4">
+                    <div class="flex items-center gap-2">
+                        <span class="text-2xl">🐤</span>
+                        <h3 class="text-xl font-bold font-display text-cyan-400">Flappy Bird</h3>
+                    </div>
+                    <button onclick="stopFlappy();document.getElementById('gameActiveModal').remove()" class="p-2 bg-slate-800 rounded-xl hover:bg-red-500 hover:text-white transition"><i data-lucide="x" class="w-5 h-5"></i></button>
+                </div>
+                <canvas id="flappyCanvas" width="320" height="420" class="bg-slate-950 rounded-2xl border border-cyan-500/30 cursor-pointer shadow-inner"></canvas>
+                <p class="text-[11px] text-slate-400 mt-3">Klik Canvas / Tekan SPASI untuk Terbang!</p>
+            </div>`;
+            document.body.appendChild(modal); try { lucide.createIcons(); } catch(_){}
+            startFlappyGame();
+        } 
+        else if (type === 'snakes') {
+            modal.innerHTML = `
+            <div class="bg-slate-900 border-2 border-emerald-500/40 text-white p-6 rounded-[2.5rem] w-full max-w-lg shadow-2xl relative flex flex-col items-center">
+                <div class="w-full flex justify-between items-center mb-3">
+                    <div class="flex items-center gap-2">
+                        <span class="text-2xl">🐍</span>
+                        <h3 class="text-xl font-bold font-display text-emerald-400">Ular Tangga vs AI</h3>
+                    </div>
+                    <button onclick="document.getElementById('gameActiveModal').remove()" class="p-2 bg-slate-800 rounded-xl hover:bg-red-500 hover:text-white transition"><i data-lucide="x" class="w-5 h-5"></i></button>
+                </div>
+                <div class="flex justify-between items-center w-full mb-3 px-2 text-xs">
+                    <div class="flex gap-4">
+                        <span class="flex items-center gap-1 font-bold text-cyan-400"><span class="w-3 h-3 rounded-full bg-cyan-400 inline-block"></span> Kamu: Petak <b id="pPos">1</b></span>
+                        <span class="flex items-center gap-1 font-bold text-rose-400"><span class="w-3 h-3 rounded-full bg-rose-500 inline-block"></span> AI Bot: Petak <b id="bPos">1</b></span>
+                    </div>
+                    <span id="snakesStatus" class="font-bold text-amber-400">Giliran Kamu!</span>
+                </div>
+                <div id="snakesBoard" class="grid grid-cols-10 gap-1 bg-slate-950 p-2 rounded-2xl w-full aspect-square border border-emerald-500/30 text-[10px]"></div>
+                <div class="flex items-center gap-4 mt-4 w-full">
+                    <button id="rollDiceBtn" onclick="playSnakesTurn()" class="flex-1 py-3 bg-gradient-to-r from-emerald-500 to-teal-500 text-slate-950 font-bold rounded-xl text-xs uppercase tracking-widest hover:opacity-90 transition">🎲 Lempar Dadu</button>
+                    <div id="diceResult" class="w-12 h-12 bg-slate-800 rounded-xl flex items-center justify-center font-bold text-xl text-amber-400 border border-slate-700">-</div>
+                </div>
+            </div>`;
+            document.body.appendChild(modal); try { lucide.createIcons(); } catch(_){}
+            initSnakesGame();
+        }
+    };
+
+    // ── 2048 Game Engine ──
+    let grid2048 = [], score2048 = 0;
+    window.init2048Game = function() {
+        grid2048 = Array(16).fill(0); score2048 = 0;
+        add2048Tile(); add2048Tile();
+        render2048();
+    };
+    function add2048Tile() {
+        const empties = grid2048.reduce((a,v,i)=>v===0?[...a,i]:a, []);
+        if (!empties.length) return;
+        const idx = empties[Math.floor(Math.random()*empties.length)];
+        grid2048[idx] = Math.random() < 0.9 ? 2 : 4;
+    }
+    function render2048() {
+        const board = document.getElementById('g2048-board');
+        const scoreEl = document.getElementById('g2048-score');
+        if (scoreEl) scoreEl.innerText = score2048;
+        if (!board) return;
+        board.innerHTML = grid2048.map(v => {
+            let bg = 'bg-slate-900 text-slate-700', txt = v || '';
+            if (v===2) bg='bg-amber-100 text-slate-800 font-bold';
+            if (v===4) bg='bg-amber-200 text-slate-800 font-bold';
+            if (v===8) bg='bg-amber-500 text-white font-bold';
+            if (v===16) bg='bg-orange-500 text-white font-bold';
+            if (v===32) bg='bg-orange-600 text-white font-bold';
+            if (v===64) bg='bg-rose-500 text-white font-bold';
+            if (v>=128) bg='bg-yellow-400 text-slate-950 font-black shadow-lg';
+            return `<div class="${bg} rounded-xl flex items-center justify-center text-lg font-display transition-all duration-150">${txt}</div>`;
+        }).join('');
+    }
+    window.move2048 = function(dir) {
+        let moved = false;
+        for (let i = 0; i < 4; i++) {
+            let r = [];
+            for (let j = 0; j < 4; j++) {
+                const idx = (dir==='up'||dir==='down') ? (j*4+i) : (i*4+j);
+                r.push(grid2048[idx]);
+            }
+            if (dir==='right'||dir==='down') r.reverse();
+            let filtered = r.filter(x => x !== 0);
+            for (let k = 0; k < filtered.length - 1; k++) {
+                if (filtered[k] === filtered[k+1]) {
+                    filtered[k] *= 2; score2048 += filtered[k]; filtered[k+1] = 0;
+                }
+            }
+            filtered = filtered.filter(x => x !== 0);
+            while (filtered.length < 4) filtered.push(0);
+            if (dir==='right'||dir==='down') filtered.reverse();
+            for (let j = 0; j < 4; j++) {
+                const idx = (dir==='up'||dir==='down') ? (j*4+i) : (i*4+j);
+                if (grid2048[idx] !== filtered[j]) moved = true;
+                grid2048[idx] = filtered[j];
+            }
+        }
+        if (moved) { add2048Tile(); render2048(); }
+    };
+
+    // ── Flappy Bird Engine ──
+    let flappyLoop = null;
+    function startFlappyGame() {
+        const cvs = document.getElementById('flappyCanvas');
+        if (!cvs) return;
+        const ctx = cvs.getContext('2d');
+        let birdY = 200, birdV = 0, gravity = 0.45, flap = -7;
+        let pipes = [], score = 0, gameOver = false;
+
+        function jump() {
+            if (gameOver) { birdY=200; birdV=0; pipes=[]; score=0; gameOver=false; loop(); return; }
+            birdV = flap;
+        }
+        cvs.onclick = jump;
+
+        let frame = 0;
+        function loop() {
+            if (!document.getElementById('flappyCanvas')) return;
+            frame++;
+            birdV += gravity; birdY += birdV;
+
+            if (frame % 80 === 0) {
+                const topH = Math.floor(Math.random() * 180) + 40;
+                pipes.push({ x: 320, top: topH, gap: 110, passed: false });
+            }
+
+            pipes.forEach(p => p.x -= 2.5);
+            pipes = pipes.filter(p => p.x > -60);
+
+            pipes.forEach(p => {
+                if (p.x < 70 && p.x + 50 > 30) {
+                    if (birdY - 12 < p.top || birdY + 12 > p.top + p.gap) gameOver = true;
+                }
+                if (!p.passed && p.x < 30) { p.passed = true; score++; }
+            });
+            if (birdY > 400 || birdY < 0) gameOver = true;
+
+            ctx.fillStyle = '#0f172a'; ctx.fillRect(0,0,320,420);
+            ctx.fillStyle = '#22c55e';
+            pipes.forEach(p => {
+                ctx.fillRect(p.x, 0, 50, p.top);
+                ctx.fillRect(p.x, p.top + p.gap, 50, 420 - (p.top + p.gap));
+            });
+            ctx.fillStyle = '#f59e0b';
+            ctx.beginPath(); ctx.arc(50, birdY, 14, 0, Math.PI * 2); ctx.fill();
+
+            ctx.fillStyle = '#ffffff'; ctx.font = 'bold 20px Outfit, sans-serif';
+            ctx.fillText(`Skor: ${score}`, 15, 35);
+
+            if (gameOver) {
+                ctx.fillStyle = 'rgba(0,0,0,0.7)'; ctx.fillRect(0,0,320,420);
+                ctx.fillStyle = '#ef4444'; ctx.font = 'bold 24px Outfit, sans-serif'; ctx.fillText('Game Over!', 90, 190);
+                ctx.fillStyle = '#ffffff'; ctx.font = '14px Outfit, sans-serif'; ctx.fillText('Klik Canvas untuk main lagi', 70, 235);
+                return;
+            }
+            flappyLoop = requestAnimationFrame(loop);
+        }
+        loop();
+    }
+    window.stopFlappy = function() { if (flappyLoop) cancelAnimationFrame(flappyLoop); };
+
+    // ── Ular Tangga vs AI Engine ──
+    let pPos = 1, bPos = 1, snakesTurn = 'player';
+    const snakesMap = { 98:78, 95:56, 92:73, 87:24, 62:18, 54:34, 47:26, 16:6 };
+    const ladderMap = { 4:14, 9:31, 21:42, 28:84, 36:44, 51:67, 71:91, 80:100 };
+
+    window.initSnakesGame = function() {
+        pPos = 1; bPos = 1; snakesTurn = 'player';
+        renderSnakesBoard();
+    };
+    function renderSnakesBoard() {
+        const b = document.getElementById('snakesBoard');
+        const pEl = document.getElementById('pPos');
+        const bEl = document.getElementById('bPos');
+        const stEl = document.getElementById('snakesStatus');
+        if (pEl) pEl.innerText = pPos;
+        if (bEl) bEl.innerText = bPos;
+        if (stEl) stEl.innerText = snakesTurn === 'player' ? '🎲 Giliran Kamu!' : '🤖 AI Sedang Lempar...';
+        if (!b) return;
+
+        let cells = [];
+        for (let r = 9; r >= 0; r--) {
+            let row = [];
+            for (let c = 0; c < 10; c++) {
+                let num = r % 2 === 1 ? (r * 10 + (10 - c)) : (r * 10 + c + 1);
+                row.push(num);
+            }
+            cells.push(...row);
+        }
+        b.innerHTML = cells.map(num => {
+            let isP = num === pPos, isB = num === bPos;
+            let isSnake = snakesMap[num], isLadder = ladderMap[num];
+            let bg = 'bg-slate-900 text-slate-400';
+            if (isSnake) bg = 'bg-rose-950/60 text-rose-400 border border-rose-800/40';
+            if (isLadder) bg = 'bg-emerald-950/60 text-emerald-400 border border-emerald-800/40';
+
+            return `<div class="${bg} rounded flex items-center justify-center relative font-bold">
+                <span class="opacity-40">${num}</span>
+                ${isP ? '<span class="absolute w-3.5 h-3.5 bg-cyan-400 rounded-full border-2 border-white shadow-lg animate-bounce"></span>' : ''}
+                ${isB ? '<span class="absolute w-3.5 h-3.5 bg-rose-500 rounded-full border-2 border-white shadow-lg"></span>' : ''}
+            </div>`;
+        }).join('');
+    }
+
+    window.playSnakesTurn = function() {
+        if (snakesTurn !== 'player') return;
+        const dice = Math.floor(Math.random() * 6) + 1;
+        document.getElementById('diceResult').innerText = dice;
+
+        pPos += dice;
+        if (pPos > 100) pPos = 100 - (pPos - 100);
+        if (snakesMap[pPos]) pPos = snakesMap[pPos];
+        if (ladderMap[pPos]) pPos = ladderMap[pPos];
+        renderSnakesBoard();
+
+        if (pPos === 100) { showToast('🎉 KAMU MENANG ULAR TANGGA!'); return; }
+
+        snakesTurn = 'bot';
+        const btn = document.getElementById('rollDiceBtn');
+        if (btn) btn.disabled = true;
+        renderSnakesBoard();
+
+        setTimeout(() => {
+            const bDice = Math.floor(Math.random() * 6) + 1;
+            const diceEl = document.getElementById('diceResult');
+            if (diceEl) diceEl.innerText = bDice;
+            bPos += bDice;
+            if (bPos > 100) bPos = 100 - (bPos - 100);
+            if (snakesMap[bPos]) bPos = snakesMap[bPos];
+            if (ladderMap[bPos]) bPos = ladderMap[bPos];
+
+            if (bPos === 100) { showToast('🤖 AI Bot Menang! Coba Lagi!'); }
+            snakesTurn = 'player';
+            if (btn) btn.disabled = false;
+            renderSnakesBoard();
+        }, 900);
+    };
 
     // =====================================================================
     // § V — UTILITIES
