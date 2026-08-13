@@ -42,10 +42,7 @@
     const DEFAULT_COVER = 'music-cover.jpg';
 
     const DEFAULT_YT = [
-        { id:100, youtubeId:'TdVS69vxap8', title:'The Music Freaks Ep.1 | RosyClozy', artist:'RosyClozy', thumbnail:'https://img.youtube.com/vi/TdVS69vxap8/hqdefault.jpg' },
-        { id:101, youtubeId:'S2O6-L-Wq7g', title:'The Music Freaks Ep.2 | RosyClozy', artist:'RosyClozy', thumbnail:'https://img.youtube.com/vi/S2O6-L-Wq7g/hqdefault.jpg' },
-        { id:102, youtubeId:'2bXnZk8i0yQ', title:'The Music Freaks Ep.3 | RosyClozy', artist:'RosyClozy', thumbnail:'https://img.youtube.com/vi/2bXnZk8i0yQ/hqdefault.jpg' },
-        { id:103, youtubeId:'v8dEa2rA0Z0', title:'The Music Freaks Ep.4 | RosyClozy', artist:'RosyClozy', thumbnail:'https://img.youtube.com/vi/v8dEa2rA0Z0/hqdefault.jpg' }
+        { id:100, youtubeId:'TdVS69vxap8', title:'The Music Freaks Ep.1 | RosyClozy', artist:'RosyClozy', thumbnail:'https://img.youtube.com/vi/TdVS69vxap8/hqdefault.jpg' }
     ];
 
     let playlist      = [];
